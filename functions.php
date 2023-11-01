@@ -44,3 +44,26 @@ if (!function_exists('IsCorrectMobilePhone')) {
         return strlen($clearPhone) === 11;
     }
 }
+
+
+
+
+
+/*
+* Сортировка многомерных массивов
+*/
+
+if (!function_exists('sortByOrder')) {
+    function sortByOrder($a, $b) {
+        if ($a['DATE_ACTIVE_FROM'] > $b['DATE_ACTIVE_FROM']) {
+            return 1;
+        } elseif ($a['DATE_ACTIVE_FROM'] < $b['DATE_ACTIVE_FROM']) {
+            return -1;
+        }
+        return 0;
+    }
+}
+
+
+
+usort($arr, 'sortByOrder');
