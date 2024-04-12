@@ -47,6 +47,13 @@ if (!function_exists('IsCorrectMobilePhone')) {
 
 
 
+function mb_ucfirst($str, $encoding='UTF-8')
+{
+    $str = mb_ereg_replace('^[\ ]+', '', $str);
+    $str = mb_strtoupper(mb_substr($str, 0, 1, $encoding), $encoding).
+        mb_substr($str, 1, mb_strlen($str), $encoding);
+    return $str;
+}
 
 
 /*
@@ -67,3 +74,47 @@ if (!function_exists('sortByOrder')) {
 
 
 usort($arr, 'sortByOrder');
+
+function debug($data, $isHide = false)
+{
+    if ($isHide) {
+        echo '<pre style="display: none">' . print_r($data, 1) . '</pre>';
+        return;
+    }
+
+    echo '<pre>' . print_r($data, 1) . '</pre>';
+}
+
+function checkNestedArrayWithId($items, $idToCheck) {
+    if (array_key_exists($idToCheck, $items) && is_array($items[$idToCheck])) {
+        return true;
+    } else {
+        return false;
+    }
+}
+function findElementById($array, $id) {
+    foreach ($array as $item) {
+        foreach ($item as $key => $value) {
+            if (is_array($value) && in_array($id, $value)) {
+                return $item; // если найден элемент с нужным ID, возвращаем этот элемент
+            }
+        }
+    }
+    return null; // если элемент не найден, возвращаем null
+}
+function findElementIndexByID($array, $id) {
+    foreach ($array as $index => $item) {
+        if (isset($item['ID']) && $item['ID'] == $id) {
+            return $index;
+        }
+    }
+    return -1; // Возвращаем -1, если элемент не найден
+}
+function checkForId($array, $id) {
+    foreach ($array as $item) {
+        if ($item['ID'] == $id) {
+            return true; // если найден элемент с нужным ID, возвращаем true
+        }
+    }
+    return false; // если элемент не найден, возвращаем false
+}
