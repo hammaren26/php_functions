@@ -118,3 +118,49 @@ function checkForId($array, $id) {
     }
     return false; // если элемент не найден, возвращаем false
 }
+/* ищем в многомерном массиве '$array' массив у которого есть ключ '$key' со значением '$value'  */
+function searchArrayByKeyValue($array, $key, $value) {
+    foreach ($array as $item) {
+        if (is_array($item) && isset($item[$key]) && $item[$key] === $value) {
+            return true;
+        }
+    }
+    return false;
+}
+/*Используем встроенную функцию PHP для проверки формата email*/
+function isValidEmail($email) {
+    if (filter_var($email, FILTER_VALIDATE_EMAIL)) {
+        return true; // Строка является действительным email
+    } else {
+        return false; // Строка не соответствует формату email
+    }
+}
+/* группируем элементы по свойству типа строка $propValue */
+function getGroupItemsByPropertiesValue($arrItems, $propValue)
+{
+    // Создаем пустой массив для группированных элементов
+    $groupedItems = [];
+
+// Проходимся по каждому элементу в $arResult['items']
+    foreach ($arrItems as $item) {
+        // Получаем значение свойства из подмассива 'properties'
+        $propertyValue = strtoupper(
+            implode(
+                "_",
+                explode(' ', $item['PROPERTIES'][$propValue]['VALUE'])
+            )
+        );
+
+        // Проверяем, существует ли уже такая группа
+        if (!isset($groupedItems[$propertyValue])) {
+            // Если нет, создаем новую группу с текущим элементом
+            $groupedItems[$propertyValue] = [];
+        }
+
+        // Добавляем текущий элемент в соответствующую группу
+        $groupedItems[$propertyValue][] = $item;
+    }
+
+
+    return $groupedItems;
+}
