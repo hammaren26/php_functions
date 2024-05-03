@@ -190,3 +190,33 @@ function getSectionChain($sectionId) {
 
     return array_reverse($sectionChain);
 }
+/**
+ * Группирует элементы по значению свойства типа список.
+ *
+ * @param array $arrItems Массив элементов для группировки.
+ * @param string $propValue Название свойства, по которому происходит группировка.
+ * @return array Массив с группами элементов.
+ */
+function getGroupItemsByListPropertyValue($arrItems, $propValue)
+{
+    // Создаем пустой массив для группированных элементов
+    $groupedItems = [];
+
+    // Проходимся по каждому элементу в $arrItems
+    foreach ($arrItems as $item) {
+
+        // Получаем значение свойства из подмассива 'properties'
+        $propertyValue = $item['PROPERTIES'][$propValue]['VALUE'] ? 'WITH_DESC' : 'NO_DESC';
+
+        // Проверяем, существует ли уже такая группа
+        if (!isset($groupedItems[$propertyValue])) {
+            // Если нет, создаем новую группу с текущим элементом
+            $groupedItems[$propertyValue] = [];
+        }
+
+        // Добавляем текущий элемент в соответствующую группу
+        $groupedItems[$propertyValue][] = $item;
+    }
+
+    return $groupedItems;
+}
