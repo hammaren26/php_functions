@@ -164,3 +164,29 @@ function getGroupItemsByPropertiesValue($arrItems, $propValue)
 
     return $groupedItems;
 }
+
+function getSectionInfo($sectionId) {
+    return SectionTable::getList([
+        'select' => ['ID', 'NAME', 'IBLOCK_ID', 'IBLOCK_SECTION_ID', 'CODE'],
+        'filter' => ['=ID' => $sectionId],
+    ])->fetch();
+}
+
+// Функция для получения цепочки разделов от текущего и выше
+function getSectionChain($sectionId) {
+    $sectionChain = [];
+    $currentSection = getSectionInfo($sectionId);
+
+    // Пока есть текущий раздел и он не является корневым
+    while ($currentSection && $currentSection['IBLOCK_SECTION_ID'] > 0) {
+        $sectionChain[] = $currentSection;
+        $currentSection = getSectionInfo($currentSection['IBLOCK_SECTION_ID']);
+    }
+
+    // Добавляем корневой раздел, если он существует
+    if ($currentSection) {
+        $sectionChain[] = $currentSection;
+    }
+
+    return array_reverse($sectionChain);
+}
