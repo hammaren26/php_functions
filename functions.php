@@ -1,10 +1,5 @@
 <?php
 
-
-/*
- * Возвращает код видео из ссылки на youtube
- * $url - УРЛ видео youtube
- * */
 if (!function_exists('GetYouTubeId')) {
     function GetYouTubeId($url)
     {
@@ -34,10 +29,12 @@ if (!function_exists('GetYouTubeId')) {
 }
 
 
-/*
- * Проверка на кол-во символов в телефоне
- */
 if (!function_exists('IsCorrectMobilePhone')) {
+    /**
+     * Проверяет, является ли номер мобильного телефона корректным
+     * @param $number
+     * @return bool
+     */
     function IsCorrectMobilePhone($number)
     {
         $clearPhone = preg_replace("/[^0-9]/", '', $number);
@@ -46,11 +43,10 @@ if (!function_exists('IsCorrectMobilePhone')) {
 }
 
 
-
-function mb_ucfirst($str, $encoding='UTF-8')
+function mb_ucfirst($str, $encoding = 'UTF-8')
 {
     $str = mb_ereg_replace('^[\ ]+', '', $str);
-    $str = mb_strtoupper(mb_substr($str, 0, 1, $encoding), $encoding).
+    $str = mb_strtoupper(mb_substr($str, 0, 1, $encoding), $encoding) .
         mb_substr($str, 1, mb_strlen($str), $encoding);
     return $str;
 }
@@ -61,7 +57,8 @@ function mb_ucfirst($str, $encoding='UTF-8')
 */
 
 if (!function_exists('sortByOrder')) {
-    function sortByOrder($a, $b) {
+    function sortByOrder($a, $b)
+    {
         if ($a['DATE_ACTIVE_FROM'] > $b['DATE_ACTIVE_FROM']) {
             return 1;
         } elseif ($a['DATE_ACTIVE_FROM'] < $b['DATE_ACTIVE_FROM']) {
@@ -70,7 +67,6 @@ if (!function_exists('sortByOrder')) {
         return 0;
     }
 }
-
 
 
 usort($arr, 'sortByOrder');
@@ -85,14 +81,17 @@ function debug($data, $isHide = false)
     echo '<pre>' . print_r($data, 1) . '</pre>';
 }
 
-function checkNestedArrayWithId($items, $idToCheck) {
+function checkNestedArrayWithId($items, $idToCheck)
+{
     if (array_key_exists($idToCheck, $items) && is_array($items[$idToCheck])) {
         return true;
     } else {
         return false;
     }
 }
-function findElementById($array, $id) {
+
+function findElementById($array, $id)
+{
     foreach ($array as $item) {
         foreach ($item as $key => $value) {
             if (is_array($value) && in_array($id, $value)) {
@@ -102,7 +101,9 @@ function findElementById($array, $id) {
     }
     return null; // если элемент не найден, возвращаем null
 }
-function findElementIndexByID($array, $id) {
+
+function findElementIndexByID($array, $id)
+{
     foreach ($array as $index => $item) {
         if (isset($item['ID']) && $item['ID'] == $id) {
             return $index;
@@ -110,7 +111,9 @@ function findElementIndexByID($array, $id) {
     }
     return -1; // Возвращаем -1, если элемент не найден
 }
-function checkForId($array, $id) {
+
+function checkForId($array, $id)
+{
     foreach ($array as $item) {
         if ($item['ID'] == $id) {
             return true; // если найден элемент с нужным ID, возвращаем true
@@ -118,8 +121,10 @@ function checkForId($array, $id) {
     }
     return false; // если элемент не найден, возвращаем false
 }
+
 /* ищем в многомерном массиве '$array' массив у которого есть ключ '$key' со значением '$value'  */
-function searchArrayByKeyValue($array, $key, $value) {
+function searchArrayByKeyValue($array, $key, $value)
+{
     foreach ($array as $item) {
         if (is_array($item) && isset($item[$key]) && $item[$key] === $value) {
             return true;
@@ -127,14 +132,17 @@ function searchArrayByKeyValue($array, $key, $value) {
     }
     return false;
 }
+
 /*Используем встроенную функцию PHP для проверки формата email*/
-function isValidEmail($email) {
+function isValidEmail($email)
+{
     if (filter_var($email, FILTER_VALIDATE_EMAIL)) {
         return true; // Строка является действительным email
     } else {
         return false; // Строка не соответствует формату email
     }
 }
+
 /* группируем элементы по свойству типа строка $propValue */
 function getGroupItemsByPropertiesValue($arrItems, $propValue)
 {
@@ -165,7 +173,8 @@ function getGroupItemsByPropertiesValue($arrItems, $propValue)
     return $groupedItems;
 }
 
-function getSectionInfo($sectionId) {
+function getSectionInfo($sectionId)
+{
     return SectionTable::getList([
         'select' => ['ID', 'NAME', 'IBLOCK_ID', 'IBLOCK_SECTION_ID', 'CODE'],
         'filter' => ['=ID' => $sectionId],
@@ -173,7 +182,8 @@ function getSectionInfo($sectionId) {
 }
 
 // Функция для получения цепочки разделов от текущего и выше
-function getSectionChain($sectionId) {
+function getSectionChain($sectionId)
+{
     $sectionChain = [];
     $currentSection = getSectionInfo($sectionId);
 
@@ -190,6 +200,7 @@ function getSectionChain($sectionId) {
 
     return array_reverse($sectionChain);
 }
+
 /**
  * Группирует элементы по значению свойства типа список.
  *
